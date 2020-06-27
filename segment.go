@@ -14,6 +14,11 @@ type Segments struct {
 	S []Segment `json:"s"`
 }
 
+// MakeSegments make empty Segments
+func MakeSegments() (s *Segments) {
+	return &Segments{S: make([]Segment, 0)}
+}
+
 // In key in Segments
 func (s *Segments) In(key int64) bool {
 	l := len(s.S)
@@ -126,4 +131,12 @@ func (s *Segments) CutSegment(sg Segment) {
 func (s *Segments) Cut(key int64) {
 
 	s.CutSegment(Segment{From: key, To: key})
+}
+
+// Union Segments
+func (s *Segments) Union(s2 *Segments) {
+
+	for _, v := range s2.S {
+		s.AddSegment(v)
+	}
 }
