@@ -10,6 +10,7 @@ type Segment struct {
 }
 
 // Segments List
+// *Segments == nil -> all segments
 type Segments struct {
 	S []Segment `json:"s"`
 }
@@ -20,7 +21,11 @@ func MakeSegments() (s *Segments) {
 }
 
 // In key in Segments
+// if s == nil returns true
 func (s *Segments) In(key int64) bool {
+	if s == nil {
+		return true
+	}
 	l := len(s.S)
 	if l == 0 {
 		return false
@@ -33,7 +38,11 @@ func (s *Segments) In(key int64) bool {
 }
 
 // AddSegment add Segment in Segments
+// if s == nil do nothing
 func (s *Segments) AddSegment(sg Segment) {
+	if s == nil {
+		return
+	}
 
 	l := len(s.S)
 
@@ -80,13 +89,18 @@ func (s *Segments) AddSegment(sg Segment) {
 }
 
 // Add key in Segments
+// if s == nil do nothing (look AddSegment)
 func (s *Segments) Add(key int64) {
 
 	s.AddSegment(Segment{From: key, To: key})
 }
 
 // CutSegment cut Segment in Segments
+// if s == nil do nothing
 func (s *Segments) CutSegment(sg Segment) {
+	if s == nil {
+		return
+	}
 
 	l := len(s.S)
 
@@ -128,15 +142,27 @@ func (s *Segments) CutSegment(sg Segment) {
 }
 
 // Cut key in Segments
+// if s == nil do nothing (look CutSegment)
 func (s *Segments) Cut(key int64) {
 
 	s.CutSegment(Segment{From: key, To: key})
 }
 
 // Union Segments
-func (s *Segments) Union(s2 *Segments) {
+// if s == nil do nothing
+// if s2 == nil do nothing
+// returns s after modification
+func (s *Segments) Union(s2 *Segments) *Segments {
+	if s == nil {
+		return s
+	}
+	if s2 == nil {
+		return s
+	}
 
 	for _, v := range s2.S {
 		s.AddSegment(v)
 	}
+
+	return s
 }
