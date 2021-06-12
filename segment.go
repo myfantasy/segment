@@ -166,3 +166,40 @@ func (s *Segments) Union(s2 *Segments) *Segments {
 
 	return s
 }
+
+// Split - splits Segments to segments list by segment
+// nil -> []*Segments{nil}
+func (s *Segments) Split() []*Segments {
+	if s == nil {
+		return []*Segments{nil}
+	}
+
+	var res []*Segments
+
+	for _, sg := range s.S {
+		res = append(res, &Segments{
+			S: []Segment{sg},
+		})
+	}
+
+	return res
+}
+
+// Less - s less then s2 (s starts befor s2)
+// nil segments in result head
+// empty segments in result tail
+func (s *Segments) Less(s2 *Segments) bool {
+	if s2 == nil {
+		return false
+	}
+	if s == nil {
+		return true
+	}
+	if len(s.S) == 0 {
+		return false
+	}
+	if len(s2.S) == 0 {
+		return true
+	}
+	return s.S[0].From < s2.S[0].From
+}
