@@ -39,16 +39,16 @@ func (s *Segments) In(key int64) bool {
 
 // AddSegment add Segment in Segments
 // if s == nil do nothing
-func (s *Segments) AddSegment(sg Segment) {
+func (s *Segments) AddSegment(sg Segment) *Segments {
 	if s == nil {
-		return
+		return s
 	}
 
 	l := len(s.S)
 
 	if l == 0 {
 		s.S = []Segment{sg}
-		return
+		return s
 	}
 
 	res := make([]Segment, 0, l)
@@ -86,26 +86,30 @@ func (s *Segments) AddSegment(sg Segment) {
 	}
 
 	s.S = res
+
+	return s
 }
 
 // Add key in Segments
 // if s == nil do nothing (look AddSegment)
-func (s *Segments) Add(key int64) {
+func (s *Segments) Add(key int64) *Segments {
 
 	s.AddSegment(Segment{From: key, To: key})
+
+	return s
 }
 
 // CutSegment cut Segment in Segments
 // if s == nil do nothing
-func (s *Segments) CutSegment(sg Segment) {
+func (s *Segments) CutSegment(sg Segment) *Segments {
 	if s == nil {
-		return
+		return s
 	}
 
 	l := len(s.S)
 
 	if l == 0 {
-		return
+		return s
 	}
 
 	res := make([]Segment, 0, l)
@@ -139,13 +143,17 @@ func (s *Segments) CutSegment(sg Segment) {
 	}
 
 	s.S = res
+
+	return s
 }
 
 // Cut key in Segments
 // if s == nil do nothing (look CutSegment)
-func (s *Segments) Cut(key int64) {
+func (s *Segments) Cut(key int64) *Segments {
 
 	s.CutSegment(Segment{From: key, To: key})
+
+	return s
 }
 
 // Union Segments
